@@ -3,16 +3,18 @@ import {Col, Row, Container, Collapse, Button, CardBody, Card } from 'reactstrap
 import Header from '../header';
 import RandomChar from '../randomChar';
 import styled from 'styled-components';
-import CharacterPage from '../characterPage';
+import {CharacterPage,HousePage,BookPage,BooksItem} from '../Page';
 import GotService from '../Servises/gotService';
-import HousePage from '../housePage';
-import BookPage from '../bookPage/';
+import {BrowserRouter as Router, Route} from 'react-router-dom';
+import './app.css';
 
 
 
 
 
-const Toggless = styled.div`      
+
+const Toggless = styled.div`  
+      
     `;
     const Collapses = {
       marginLeft: "0px" 
@@ -42,8 +44,12 @@ export default class App extends Component{
      
     GotService = new GotService();
     state ={
-        selectedChar: null,
-        error: false
+        selectedItem: null,
+        error: false,
+        Charvision:false,
+        Bookvision:false,
+        Housevision:false,
+        GOT:true
     }
    
     componentDidCatch () {
@@ -55,7 +61,46 @@ export default class App extends Component{
 
     onItemSelected = (id) => {
         this.setState({
-            selectedChar:id
+            selectedItem:id
+        })
+       
+    }
+    onItemVision0 = () => {
+        this.setState({
+            Charvision:false,
+            Bookvision:false,
+            Housevision:false,
+            GOT:true
+        })
+       
+    }
+
+    onItemVision1 = () => {
+        this.setState({
+            Charvision:true,
+            Bookvision:false,
+            Housevision:false,
+            GOT:false
+        })
+       
+    }
+
+    onItemVision2 = () => {
+        this.setState({
+            Charvision:false,
+            Bookvision:true,
+            Housevision:false,
+            GOT:false
+        })
+       
+    }
+
+    onItemVision3 = () => {
+        this.setState({
+            Charvision:false,
+            Bookvision:false,
+            Housevision:true,
+            GOT:false
         })
        
     }
@@ -69,23 +114,43 @@ export default class App extends Component{
         if (this.state.error){
               return <Error/> ;
          }
+      
         return (
-            <> 
-                <Container>
-                    <Header />
-                </Container>
-                <Container>
-                    <Row>
-                        <Col lg={{size: 5, offset: 0}}>
-                            <Toggles/>
-                        </Col>
-                    </Row>
-                    <CharacterPage />
-                    <BookPage/>
-                    <HousePage/>
-                        
-                </Container>
-            </>
+            <Router>
+                    <div className='app'> 
+                        <Container >
+                            <Header vision0 = {this.onItemVision0}
+                                    vision1 = {this.onItemVision1}
+                                    vision2 = {this.onItemVision2}
+                                    vision3 = {this.onItemVision3}
+                                    Charvision={this.state.Charvision}
+                                    Bookvision={this.state.Bookvision}
+                                    Housevision={this.state.Housevision}
+                                    GOT={this.state.GOT}/>
+                        </Container>
+                        <Container>
+                            <Row>
+                                <Col lg={{size: 5, offset: 0}}>
+                                    <Toggles/>
+                                </Col>
+                            </Row>
+                            <Route path ='/' component = {() => <h1 style= {{ color: '#fff'}}> Hello Boris!</h1>} exact/>
+                            <Route path = '/characters' component= {CharacterPage}/>
+                            <Route path = '/houses' component= {HousePage}/>
+                            <Route path = '/books' exact component= {BookPage}/>
+                            <Route path = '/books/:id' render={
+                                ({match,location}) => {
+                                    const {id} = match.params;
+                                    console.log(location);
+                                return <BooksItem booksId={id} />
+                                
+                                    }
+                                }/>
+                                
+                        </Container>
+                    </div>
+            </Router>
+          
         );
 
     }
@@ -95,13 +160,13 @@ export default class App extends Component{
 
 
 const Toggles = (props) => {
-    const [isOpen, setIsOpen] = useState(false);
+    const [isOpen, setIsOpen] = useState(true);
     
         const toggle = () => {
             setIsOpen(!isOpen);
         
       }
-      const fill = isOpen ? null : <RandomChar/>  
+      const fill = isOpen ? null : <RandomChar />  
       
       return (
         <Toggless style={{marginBottom: '15px' }}>

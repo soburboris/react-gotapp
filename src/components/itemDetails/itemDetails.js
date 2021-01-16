@@ -1,14 +1,16 @@
 import React, {Component} from 'react';
 import './itemDetails.css';
-import GotService from '../Servises/gotService';
+
 import Spinner from '../spinner';
 
 
 const Field = ({item,field,label}) => {
+   
     return (
         <li className="list-group-item d-flex justify-content-between">
              <span className="term">{label}</span>
              <span>{item[field]}</span>
+             
         </li>
     )
 }
@@ -16,39 +18,39 @@ export {Field}
 
 export default class ItemDetails extends Component {
 
-    GotService = new GotService();
+    
     state = {
        item:null
                 
     }
 
     componentDidMount() {
-        this.updateChar();
+        this.updateItem();
     }
 
     componentDidUpdate(prevProps) {
-        if (this.props.charId !== prevProps.charId) {
-            this.updateChar();
+        if (this.props.itemId !== prevProps.itemId) {
+            this.updateItem();
         }
        
     }
 
-    updateChar () {
-        const {charId} =this.props;
-        if (!charId) {
+    updateItem () {
+        const {itemId,itemOut} =this.props;
+        if (!itemId) {
             return;
         }
-            this.GotService.getCharacter(charId)
-            .then((item) => {
-              
-                this.setState({
-                    item,
-                    loading: false,
-                    renew: false,
-                    error: false
-                    
-               })            
-            })
+            itemOut(itemId)
+                .then((item) => {
+                
+                    this.setState({
+                        item,
+                        loading: false,
+                        renew: false,
+                        error: false
+                        
+                })            
+                })
       
         
             // this.foo.ddd = 3;

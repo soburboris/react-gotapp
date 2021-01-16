@@ -47,15 +47,16 @@ export default class GotService {
         if (data) {
             return data
         } else {
-            return 'unknown'
+            return 'unknown';
         }
     }    
     
     _extractId = (item) => {
         const idRegExp = /\/([0-9]*)$/;
         return item.url.match(idRegExp)[1];
-    }
 
+    }
+    
     _transformCharacter = (item) => {
         return {
             id: this._extractId(item),
@@ -65,6 +66,7 @@ export default class GotService {
             died: this.isSet(item.died), 
             culture: this.isSet(item.culture)
         };
+        
     }
 
     _transformHouse = (item) => {
@@ -74,7 +76,7 @@ export default class GotService {
             region: this.isSet(item.region),
             words: this.isSet(item.words),
             titles: this.isSet(item.titles),
-            ancestralWeapons: this.isSet(item.ancestralWeapons)
+            coatOfArms: this.isSet(item.coatOfArms)
         };
     }
     

@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import styled from 'styled-components';
 import GotService from '../Servises/gotService';
 import Spinner from '../spinner';
+import PropTypes from 'prop-types';
 
 const Img = styled.img`
 width: 50%;
@@ -31,19 +32,24 @@ font-weight: bold;
 
 export default class RandomChar extends Component {
    
+    static defaultProps = {
+        interval:3333
+    }
+    
+    static propTypes = {
+        interval: PropTypes.number
+    }
     GotService = new GotService();
     state = {
        char:{},
        loading:true,
        error:null,
       
-       
-        
     }
 
 
     componentDidMount() {
-        this.timerId = setInterval(this.updareChar,1500);
+        this.timerId = setInterval(this.updareChar,this.props.interval);
     }
 
     componentWillUnmount() {
@@ -80,7 +86,7 @@ export default class RandomChar extends Component {
 
     updareChar =()=> {
       
-        const id = Math.floor(Math.random()*2000+315);
+        const id = Math.floor(Math.random()*100+315);
         
         this.GotService.getCharacter(id)
             .then(this.onCharLoaded)
@@ -96,7 +102,7 @@ export default class RandomChar extends Component {
         const spinner = loading ? <Spinner/> : null;
         const viewer = !(loading || error) ? <View char={char}/> : null;
         const viewError = error ? <ErrorS/> : null;
-        console.log('render');
+        
 
         return (
             <RandomBlock>
@@ -109,6 +115,8 @@ export default class RandomChar extends Component {
     }
     
 }
+
+
 
 const ErrorS = () => {
     return (

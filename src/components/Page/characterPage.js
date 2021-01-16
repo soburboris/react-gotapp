@@ -11,10 +11,12 @@ import RowBlock from '../rowBlock';
 export default class CharacterPage extends Component {
 
     GotService = new GotService();
+    
 
     state ={
         selectedChar:111,
-        error: false
+        error: false,
+        
     }
 
     componentDidCatch () {
@@ -25,10 +27,16 @@ export default class CharacterPage extends Component {
     }
     onItemSelected = (id) => {
         this.setState({
-            selectedChar:id
+            selectedChar:id,
+            
         })
        
     }
+
+    renders = ({name,gender}) => 
+        `${name} ( ${gender})`;
+    
+    
 
 
     render(){
@@ -42,11 +50,13 @@ export default class CharacterPage extends Component {
             <ItemList 
                             onItemSelected={this.onItemSelected}
                             getData={this.GotService.getAllCharacters}
-                            renderItem={({name,gender}) => `${name} ( ${gender})`}/>
+                            renderItem={this.renders}
+                            />
         )
 
         const charDetails = (
-            <ItemDetails  charId={this.state.selectedChar}>
+            <ItemDetails  itemId={this.state.selectedChar}
+             itemOut= {this.GotService.getCharacter}>
                 <Field field='gender' label='Gender'/>
                 <Field field='born' label='Born'/>
                 <Field field='died' label='Died'/>
